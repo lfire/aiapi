@@ -1,0 +1,8 @@
+# Dependency directory
+node_modules
+
+# IDE config
+.idea
+
+# package lock file
+package-lock.json
