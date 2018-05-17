@@ -1,0 +1,17 @@
+{
+  "restartable": "rs",
+  "ignore": [],
+  "verbose": true,
+  "execMap": {
+    "": "node",
+    "js": "node --harmony"
+  },
+  "events": {},
+  "watch": [
+    "config.js",
+    "mock/"
+  ],
+  "env": {},
+  "ext": "js json",
+  "legacy-watch": true
+}
