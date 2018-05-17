@@ -1,37 +1,26 @@
+'use strict';
+
 const Mock   = require('mockjs');
-const Random = Mock.Random;
 
 module.exports = () => {
-  let data = {
-    stars: [],
-    news: []
-  };
-
-  const starImages = [1, 2, 3].map(img => Random.image('120x60', Random.color(), Random.word(2, 6)));
-  for (let i = 0; i < 50; i++) {
-    const contents = Random.cparagraph(0, 10);
-    data.stars.push({
-      id: i,
-      name: Random.cname(),
-      desc: contents.substr(0, 50),
-      tag: Random.cword(2, 8),
-      views: Random.integer(100, 5000),
-      images: starImages.slice(0, Random.integer(1, 3))
-    });
-  }
-
-  const newsImages = [1, 2, 3].map(img => Random.image('120x60', Random.color(), Random.word(2, 6)));
-  for (let i = 0; i < 100; i++) {
-    const contents = Random.cparagraph(0, 10);
-    data.news.push({
-      id: i,
-      title: Random.cword(8, 20),
-      desc: contents.substr(0, 50),
-      tag: Random.cword(2, 8),
-      views: Random.integer(100, 5000),
-      images: newsImages.slice(0, Random.integer(1, 3))
-    });
-  }
+  let data = Mock.mock({
+    "stars|50": [{
+      "id|+1": 1,
+      "name": "@cname()",
+      "desc": "@cparagraph(0, 3)",
+      "tag": "@cword(2, 8)",
+      "views": "@integer(100, 5000)",
+      "images": "@image('120x60', @color(), @word(2, 6))"
+    }],
+    "news|100": [{
+      "id|+1": 1,
+      "title": "@ctitle(8, 20)",
+      "desc": "@cparagraph(1, 5)",
+      "tag|1": ["时政", "早报", "军事", "民生", "体育", "娱乐"],
+      "views": "@integer(200, 5000)",
+      "images": "@image('200x200', @color(), @word(3, 5))"
+    }]
+  });
 
   return data;
 };

@@ -1,39 +1,52 @@
-const path       = require('path');
-const config     = require('./config');
+'use strict';
+
 const jsonServer = require('json-server');
-const rules      = require(config.RULES);
-const dbFile     = require(config.DB_FILE);
+const chalk      = require('chalk');
 
-const ip   = config.SERVER;
-const port = config.PORT;
+let config = require('./config');
+let rules  = require(config.RULES);
+let dbFile = require(config.DB_FILE);
 
-const server      = jsonServer.create();
-const router      = jsonServer.router(dbFile());
-const middlewares = jsonServer.defaults();
+let ip   = config.SERVER;
+let port = config.PORT;
+
+let server      = jsonServer.create();
+let router      = jsonServer.router(dbFile());
+let middlewares = jsonServer.defaults();
 
 server.use(jsonServer.bodyParser);
 server.use(middlewares);
 
-server.use((req, res, next) => {
-  // res.header('X-Hello', 'World');
-  next();
-});
+let app = void 0;
 
-router.render = (req, res) => {
-  res.jsonp({
-    code: 0,
-    body: res.locals.data
+function start(cb) {
+  server.use((req, res, next) => {
+    // res.header('X-Hello', 'World');
+    next();
   });
-};
 
-// server.use('/api', router);
-server.use(jsonServer.rewriter(rules));
-server.use(router);
+  router.render = (req, res) => {
+    res.jsonp({
+      code: 0,
+      body: res.locals.data
+    });
+  };
 
-server.listen({
-  host: ip,
-  port: port
-}, function () {
-  console.log(JSON.stringify((jsonServer)));
-  console.log(`JSON Server is running in http://${ip}:${port}`);
-});
+  // server.use('/api', router);
+  server.use(jsonServer.rewriter(rules));
+  server.use(router);
+
+  app = server.listen({
+    host: ip,
+    port: port
+  }, function () {
+    console.log(chalk.blue(` JSON Server is running in http://${ip}:${port}`));
+    console.log();
+  });
+
+  cb && cb();
+}
+
+// start the app
+start();
+
