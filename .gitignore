@@ -6,3 +6,7 @@ node_modules
 
 # package lock file
 package-lock.json
+
+# ignore the project mock except demo
+mock
+!mock/demo
